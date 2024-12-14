@@ -1,13 +1,15 @@
 package telran.producer.consumer;
 
 public class Receiver extends Thread {
-    private final MessageBox messageBox;
-    private final int threadIndex;
+    private MessageBox messageBox;
 
-    public Receiver(MessageBox messageBox, int threadIndex) {
+    public Receiver(MessageBox messageBox) {
         this.messageBox = messageBox;
-        this.threadIndex = threadIndex;
         setDaemon(false);
+    }
+
+    public void setMessageBox(MessageBox messageBox) {
+        this.messageBox = messageBox;
     }
 
     @Override
@@ -18,27 +20,10 @@ public class Receiver extends Thread {
                 if (message == null) {
                     break;
                 }
-
-                int messageNumber = extractMessageNumber(message);
-
-                if ((threadIndex % 2 == 0 && messageNumber % 2 == 0) ||
-                    (threadIndex % 2 != 0 && messageNumber % 2 != 0)) {
-                    System.out.printf("Thread: %s (Index: %d), message: %s\n", getName(), threadIndex, message);
-                } else {
-                    messageBox.put(message);
-                }
-
+                System.out.printf("Thread: %s, message: %s\n", getName(), message);
             } catch (InterruptedException ex) {
                 break;
             }
-        }
-    }
-
-    private int extractMessageNumber(String message) {
-        try {
-            return Integer.parseInt(message.replaceAll("\\D", ""));
-        } catch (NumberFormatException e) {
-            return -1;
         }
     }
 }

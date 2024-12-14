@@ -13,7 +13,7 @@ public class Main {
         List<Receiver> receivers = new ArrayList<>();
 
         for (int i = 0; i < N_RECEIVERS; i++) {
-            Receiver receiver = new Receiver(messageBox, i);
+            Receiver receiver = new Receiver(messageBox);
             receivers.add(receiver);
             receiver.start();
         }
