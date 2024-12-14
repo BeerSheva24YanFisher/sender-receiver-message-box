@@ -13,7 +13,6 @@ public class Sender extends Thread{
             try {
                 messageBox.put("Message" + (i +1));
             } catch (InterruptedException e) {
-                
             }
             
     }
