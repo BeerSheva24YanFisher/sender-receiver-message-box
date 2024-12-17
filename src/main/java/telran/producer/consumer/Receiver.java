@@ -5,7 +5,7 @@ public class Receiver extends Thread {
 
     public Receiver(MessageBox messageBox) {
         this.messageBox = messageBox;
-        setDaemon(false);
+
     }
 
     public void setMessageBox(MessageBox messageBox) {
@@ -14,16 +14,16 @@ public class Receiver extends Thread {
 
     @Override
     public void run() {
-        while (true) {
-            try {
+        try {
+            while (true) {
+
                 String message = messageBox.take();
-                if (message == null) {
-                    break;
-                }
                 System.out.printf("Thread: %s, message: %s\n", getName(), message);
-            } catch (InterruptedException ex) {
-                break;
+
             }
+        } catch (InterruptedException e) {
+            // will exit from the cycle by interrupt
         }
     }
+
 }
