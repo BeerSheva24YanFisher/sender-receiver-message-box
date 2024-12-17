@@ -1,29 +1,29 @@
 package telran.producer.consumer;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Main {
     private static final int N_MESSAGES = 20;
-    private static final int N_RECEIVERS = 10;
+    static final int N_RECEIVERS = 10;
 
     public static void main(String[] args) throws InterruptedException {
-        MessageBox messageBox = new SimpleMessageBox();
-        Sender sender = new Sender(N_MESSAGES, messageBox);
-        List<Receiver> receivers = new ArrayList<>();
+        MessageBox messageBoxEven = new SimpleMessageBox();
+        MessageBox messageBoxOdd = new SimpleMessageBox();
+        Sender sender = new Sender(N_MESSAGES, messageBoxEven, messageBoxOdd);
 
         for (int i = 0; i < N_RECEIVERS; i++) {
-            Receiver receiver = new Receiver(messageBox, i);
-            receivers.add(receiver);
+            Receiver receiver = new Receiver(null);
+            MessageBox messageBox = isReceiverEven(receiver) ? messageBoxEven : messageBoxOdd;
+            receiver.setMessageBox(messageBox);
             receiver.start();
         }
-
         sender.start();
         sender.join();
 
-        for (Receiver receiver : receivers) {
-            receiver.interrupt();
-            receiver.join();
-        }
+        Thread.sleep(100);
+
+    }
+
+    private static boolean isReceiverEven(Receiver receiver) {
+        long id = receiver.getId();
+        return id % 2 == 0;
     }
 }
